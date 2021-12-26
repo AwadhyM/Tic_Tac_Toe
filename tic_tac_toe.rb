@@ -9,3 +9,24 @@ class Game
 end 
 
 game = Game.new
+
+class GameBoard 
+  
+  def initialize
+    @board = [
+               ['','',''],
+               ['','',''],
+               ['','','']
+    ]
+  end
+
+    def display_board
+      @board.each do |row|
+        row.each {|cell| print "[ #{cell} ]" }
+        puts "\n--------------"
+      end
+  end
+end
+
+  board = GameBoard.new 
+  board.display_board
