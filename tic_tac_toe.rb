@@ -6,10 +6,12 @@ class Game
   def initialize
     @turn = 0
     @counter = 0
+    puts 'Welcome to this game of Tic Tac Toe.'
   end
 
-  def fetch_player
-    puts "\nGreetings player#{@@number_of_players}, what username would you like for this game?"
+  def ask_player
+    @counter += 1
+    puts "\nGreetings player#{@counter}, what username would you like for this game?"
   end
 end
 
@@ -43,3 +45,10 @@ class Players
 end
 
 game = Game.new 
+board = GameBoard.new
+board.display_board
+game.ask_player
+player1 = Players.new(gets.chomp.to_s, 'O')
+game.ask_player
+player2 = Players.new(gets.chomp.to_s, 'X')
+
