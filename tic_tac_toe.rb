@@ -28,15 +28,15 @@ class Players
     @@number_of_players += 1
   end
 
-  def verify_name  
-      while name.empty? == true
-        puts "State your name. NO empty spaces this time"
-        @name = gets.chomp
+  def verify_name
+    while name.empty? == true
+      puts 'State your name. NO empty spaces this time'
+      @name = gets.chomp
     end
-end
+  end
 end
 
-class Game 
+class Game
   attr_accessor :turn, :counter
 
   def initialize
@@ -51,13 +51,13 @@ class Game
   end
 
   def display_info(player1, player2)
-    puts "Game Info:"
-    puts "\n" + player1.name + " Move: #{player1.move}"
-    puts "\n" + player2.name + " Move: #{player2.move}"
+    puts 'Game Info:'
+    puts "\n#{player1.name} Move: #{player1.move}"
+    puts "\n#{player2.name} Move: #{player2.move}"
   end
 end
 
-game = Game.new 
+game = Game.new
 board = GameBoard.new
 board.display_board
 game.ask_player
