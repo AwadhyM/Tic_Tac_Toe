@@ -27,6 +27,13 @@ class Players
     @move = move
     @@number_of_players += 1
   end
+
+  def verify_name  
+      while name.empty? == true
+        puts "State your name. NO empty spaces this time"
+        @name = gets.chomp
+    end
+end
 end
 
 class Game 
@@ -55,7 +62,8 @@ board = GameBoard.new
 board.display_board
 game.ask_player
 player1 = Players.new(gets.chomp.to_s, 'O')
+player1.verify_name
 game.ask_player
 player2 = Players.new(gets.chomp.to_s, 'X')
+player2.verify_name
 game.display_info(player1, player2)
-
