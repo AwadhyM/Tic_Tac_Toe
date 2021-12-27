@@ -52,8 +52,8 @@ class Game
 
   def display_info(player1, player2)
     puts 'Game Info:'
-    puts "\n#{player1.name} Move: #{player1.move}"
-    puts "\n#{player2.name} Move: #{player2.move}"
+    puts "\nUsername:#{player1.name} |Move: #{player1.move}"
+    puts "\Username:n#{player2.name} |Move: #{player2.move}"
   end
 end
 
