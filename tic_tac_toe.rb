@@ -1,8 +1,13 @@
 # frozen_string_literal: true
 
+require 'pry-byebug'
+
 class GameBoard
+
+  attr_reader :grid
+
   def initialize
-    @board = [
+    @grid = [
       ['', '', ''],
       ['', '', ''],
       ['', '', '']
@@ -10,7 +15,7 @@ class GameBoard
   end
 
   def display_board
-    @board.each do |row|
+    grid.each do |row|
       row.each { |cell| print "[ #{cell} ]" }
       puts "\n--------------"
     end
@@ -61,24 +66,35 @@ class Game
   def display_info(player1, player2)
     puts 'Game Info:'
     puts "\nUsername:#{player1.name} |Move: #{player1.move}"
-    puts "\nUsername:n#{player2.name} |Move: #{player2.move}"
+    puts "\nUsername:#{player2.name} |Move: #{player2.move}"
   end
 
   def play_round (board, game, player1, player2)
     while @turn <= 7 do
     board.display_board
     game.retrieve_x_coordinate
-    x = gets.chomp
+    x = gets.chomp.to_i
     game.retrieve_y_coordinate
-    y = gets.chomp
+    y = gets.chomp.to_i
+    game.append_move(x, y, board)
     @turn += 1
   end
 end
+
+def append_move(x, y, board)
+  if @turn % 2 == 0
+    board.grid[x-1][y-1] = 'O'
+  else 
+    board.grid[x - 1][y - 1] = 'X'
+  end
 end
+
+end
+
+
 
 game = Game.new
 board = GameBoard.new
-board.display_board
 game.ask_player
 player1 = Players.new(gets.chomp.to_s, 'O')
 player1.verify_name
