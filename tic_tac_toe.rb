@@ -65,16 +65,15 @@ end
       @counter += 1
     elsif diagonal.length == 3 && diagonal.uniq == ['O']
       puts "Congratulations #{player1.name} you win!"
-      @counter += 1
       game.turn = 8
     elsif diagonal.length == 3 && diagonal.uniq == ['X']
       puts "Congratulations #{player2.name} you win!"
-      @counter += 1
       game.turn = 8
     end
-  end  
+  end
 
   def check_winner_diagonal_2(player1, player2, counter, game)
+    while @counter <= 2 do
     diagonal = [grid[0][2], grid[1][1], grid[2][0]]
     if diagonal.uniq == [''] || diagonal.uniq.length > 1
       @counter += 1
@@ -87,7 +86,8 @@ end
       @counter += 1
       game.turn = 8
     end
-  end  
+  end 
+end 
 
   def reset_counter
     @counter = 0
@@ -154,9 +154,7 @@ class Game
     board.check_winner_column(player1, player2, @counter, game)
     board.reset_counter
     board.check_winner_diagonal_1(player1,player2, @counter, game)
-    board.reset_counter
     board.check_winner_diagonal_2(player1,player2, @counter, game)
-    board.reset_counter
     @turn += 1
   end
 end
