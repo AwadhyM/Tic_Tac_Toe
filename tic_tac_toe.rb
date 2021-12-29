@@ -4,7 +4,7 @@ require 'pry-byebug'
 
 class GameBoard
 
-  attr_reader :grid
+  attr_reader :grid, :counter
 
   def initialize
     @grid = [
@@ -12,6 +12,7 @@ class GameBoard
       ['', '', ''],
       ['', '', '']
     ]
+    @counter = 0
   end
 
   def display_board
@@ -19,6 +20,26 @@ class GameBoard
       row.each { |cell| print "[ #{cell} ]" }
       puts "\n--------------"
     end
+  end
+
+  def check_winner(player1, player2, counter, game)
+    while @counter <= 2 do
+    if grid[@counter].uniq == [''] || grid[@counter].uniq.length > 1
+      @counter += 1
+    elsif grid[@counter].length == 3 && grid[@counter].uniq == ['O']
+      puts "Congratulations #{player1.name} you win!"
+      @counter += 1
+      game.turn = 8
+    elsif grid[@counter].length == 3 && grid[@counter].uniq == ['X']
+      puts "Congratulations #{player2.name} you win!"
+      @counter += 1
+      game.turn = 8
+    end
+  end
+end
+
+  def reset_counter
+    @counter = 0
   end
 end
 
@@ -42,17 +63,17 @@ class Players
 end
 
 class Game
-  attr_accessor :turn, :counter
+  attr_accessor :turn, :number_of_player
 
   def initialize
     @turn = 0
-    @counter = 0
+    @number_of_player = 0
     puts 'Welcome to this game of Tic Tac Toe.'
   end
 
   def ask_player
-    @counter += 1
-    puts "\nGreetings player#{@counter}, what username would you like for this game?"
+    @number_of_player += 1
+    puts "\nGreetings player#{@number_of_player}, what username would you like for this game?"
   end
 
   def retrieve_x_coordinate
@@ -77,7 +98,10 @@ class Game
     game.retrieve_y_coordinate
     y = gets.chomp.to_i
     game.append_move(x, y, board)
+    board.check_winner(player1, player2, @counter, game)
+    board.reset_counter
     @turn += 1
+    #binding.pry
   end
 end
 
@@ -89,6 +113,9 @@ def append_move(x, y, board)
   end
 end
 
+def end_game
+  @turn = 8
+end
 end
 
 
