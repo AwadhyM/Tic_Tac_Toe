@@ -4,7 +4,7 @@ require 'pry-byebug'
 
 class GameBoard
 
-  attr_reader :grid, :counter
+  attr_reader :grid, :counter, :column
 
   def initialize
     @grid = [
@@ -13,6 +13,8 @@ class GameBoard
       ['', '', '']
     ]
     @counter = 0
+
+    @column = Array.new
   end
 
   def display_board
@@ -22,7 +24,7 @@ class GameBoard
     end
   end
 
-  def check_winner(player1, player2, counter, game)
+  def check_winner_row(player1, player2, counter, game)
     while @counter <= 2 do
     if grid[@counter].uniq == [''] || grid[@counter].uniq.length > 1
       @counter += 1
@@ -31,6 +33,24 @@ class GameBoard
       @counter += 1
       game.turn = 8
     elsif grid[@counter].length == 3 && grid[@counter].uniq == ['X']
+      puts "Congratulations #{player2.name} you win!"
+      @counter += 1
+      game.turn = 8
+    end
+  end
+end
+
+def check_winner_column(player1, player2, counter, game)
+  while @counter <= 2 do
+    # binding.pry
+    column = [grid[0][@counter], grid[1][@counter], grid[2][@counter]]
+    if column.uniq == [''] || column.uniq.length > 1
+      @counter += 1
+    elsif column.length == 3 && column.uniq == ['O']
+      puts "Congratulations #{player1.name} you win!"
+      @counter += 1
+      game.turn = 8
+    elsif column.length == 3 && column.uniq == ['X']
       puts "Congratulations #{player2.name} you win!"
       @counter += 1
       game.turn = 8
@@ -98,10 +118,11 @@ class Game
     game.retrieve_y_coordinate
     y = gets.chomp.to_i
     game.append_move(x, y, board)
-    board.check_winner(player1, player2, @counter, game)
+    board.check_winner_row(player1, player2, @counter, game)
+    board.reset_counter
+    board.check_winner_column(player1, player2, @counter, game)
     board.reset_counter
     @turn += 1
-    #binding.pry
   end
 end
 
