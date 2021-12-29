@@ -4,7 +4,7 @@ require 'pry-byebug'
 
 class GameBoard
 
-  attr_reader :grid, :counter, :column
+  attr_reader :grid, :counter, :column, :diagonal
 
   def initialize
     @grid = [
@@ -15,6 +15,7 @@ class GameBoard
     @counter = 0
 
     @column = Array.new
+    @diagonal = Array.new 
   end
 
   def display_board
@@ -57,6 +58,36 @@ def check_winner_column(player1, player2, counter, game)
     end
   end
 end
+
+  def check_winner_diagonal_1(player1, player2, counter, game)
+    diagonal = [grid[0][0], grid[1][1], grid[2][2]]
+    if diagonal.uniq == [''] || diagonal.uniq.length > 1
+      @counter += 1
+    elsif diagonal.length == 3 && diagonal.uniq == ['O']
+      puts "Congratulations #{player1.name} you win!"
+      @counter += 1
+      game.turn = 8
+    elsif diagonal.length == 3 && diagonal.uniq == ['X']
+      puts "Congratulations #{player2.name} you win!"
+      @counter += 1
+      game.turn = 8
+    end
+  end  
+
+  def check_winner_diagonal_2(player1, player2, counter, game)
+    diagonal = [grid[0][2], grid[1][1], grid[2][0]]
+    if diagonal.uniq == [''] || diagonal.uniq.length > 1
+      @counter += 1
+    elsif diagonal.length == 3 && diagonal.uniq == ['O']
+      puts "Congratulations #{player1.name} you win!"
+      @counter += 1
+      game.turn = 8
+    elsif diagonal.length == 3 && diagonal.uniq == ['X']
+      puts "Congratulations #{player2.name} you win!"
+      @counter += 1
+      game.turn = 8
+    end
+  end  
 
   def reset_counter
     @counter = 0
@@ -122,13 +153,17 @@ class Game
     board.reset_counter
     board.check_winner_column(player1, player2, @counter, game)
     board.reset_counter
+    board.check_winner_diagonal_1(player1,player2, @counter, game)
+    board.reset_counter
+    board.check_winner_diagonal_2(player1,player2, @counter, game)
+    board.reset_counter
     @turn += 1
   end
 end
 
 def append_move(x, y, board)
   if @turn % 2 == 0
-    board.grid[x-1][y-1] = 'O'
+    board.grid[x - 1][y - 1] = 'O'
   else 
     board.grid[x - 1][y - 1] = 'X'
   end
