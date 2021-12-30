@@ -85,18 +85,23 @@ def check_winner_column(player1, player2, counter, game)
 end
 
   def check_winner_diagonal_1(player1, player2, counter, game)
+    while @counter <= 2 do
     diagonal = [grid[0][0], grid[1][1], grid[2][2]]
     if diagonal.uniq == [''] || diagonal.uniq.length > 1
+      @counter += 3
     elsif diagonal.length == 3 && diagonal.uniq == ['O']
       self.display_board
       puts "Congratulations #{player1.name} you win!"
       game.end_game
+      @counter += 3
     elsif diagonal.length == 3 && diagonal.uniq == ['X']
       self.display_board
       puts "Congratulations #{player2.name} you win!"
       game.end_game
+      @counter += 3
     end
   end
+end
 
   def check_winner_diagonal_2(player1, player2, counter, game)
     while @counter <= 2 do
@@ -107,13 +112,23 @@ end
       self.display_board
       puts "Congratulations #{player1.name} you win!"
       game.end_game
+      @counter += 3
     elsif diagonal.length == 3 && diagonal.uniq == ['X']
       self.display_board
       puts "Congratulations #{player2.name} you win!"
       game.end_game
+      @counter += 3
+      break
     end
   end 
 end 
+
+def check_draw(game)
+  if game.turn > 8 && game.turn < 10
+    puts "Looks like you are both evenly matched! The game ends in a draw"
+    game.end_game
+  end
+end
 
   def reset_counter
     @counter = 0
@@ -172,7 +187,7 @@ class Game
   end
 
   def play_round (board, game, player1, player2)
-    while @turn <= 7 do
+    while @turn <= 9 do
     board.display_board
     game.retrieve_x_coordinate
     board.verify_x_coordinate(game)
@@ -188,6 +203,7 @@ class Game
     board.reset_counter
     board.check_winner_diagonal_2(player1,player2, @counter, game)
     board.reset_counter
+    board.check_draw(game)
     @turn += 1
   end
 end
@@ -202,7 +218,7 @@ def append_move(x, y, board)
 end
 
 def end_game
-  @turn = 8
+  @turn = 10
 end
 end
 
