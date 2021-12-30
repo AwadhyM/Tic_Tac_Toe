@@ -25,15 +25,19 @@ class GameBoard
     end
   end
 
+  
+
   def check_winner_row(player1, player2, counter, game)
     while @counter <= 2 do
     if grid[@counter].uniq == [''] || grid[@counter].uniq.length > 1
       @counter += 1
     elsif grid[@counter].length == 3 && grid[@counter].uniq == ['O']
+      self.display_board
       puts "Congratulations #{player1.name} you win!"
       @counter += 1
       game.turn = 8
     elsif grid[@counter].length == 3 && grid[@counter].uniq == ['X']
+      self.display_board
       puts "Congratulations #{player2.name} you win!"
       @counter += 1
       game.turn = 8
@@ -48,10 +52,12 @@ def check_winner_column(player1, player2, counter, game)
     if column.uniq == [''] || column.uniq.length > 1
       @counter += 1
     elsif column.length == 3 && column.uniq == ['O']
+      self.display_board
       puts "Congratulations #{player1.name} you win!"
       @counter += 1
       game.turn = 8
     elsif column.length == 3 && column.uniq == ['X']
+      self.display_board
       puts "Congratulations #{player2.name} you win!"
       @counter += 1
       game.turn = 8
@@ -64,9 +70,11 @@ end
     if diagonal.uniq == [''] || diagonal.uniq.length > 1
       @counter += 1
     elsif diagonal.length == 3 && diagonal.uniq == ['O']
+      self.display_board
       puts "Congratulations #{player1.name} you win!"
       game.turn = 8
     elsif diagonal.length == 3 && diagonal.uniq == ['X']
+      self.display_board
       puts "Congratulations #{player2.name} you win!"
       game.turn = 8
     end
@@ -78,12 +86,12 @@ end
     if diagonal.uniq == [''] || diagonal.uniq.length > 1
       @counter += 1
     elsif diagonal.length == 3 && diagonal.uniq == ['O']
+      self.display_board
       puts "Congratulations #{player1.name} you win!"
-      @counter += 1
       game.turn = 8
     elsif diagonal.length == 3 && diagonal.uniq == ['X']
+      self.display_board
       puts "Congratulations #{player2.name} you win!"
-      @counter += 1
       game.turn = 8
     end
   end 
@@ -155,15 +163,16 @@ class Game
     board.reset_counter
     board.check_winner_diagonal_1(player1,player2, @counter, game)
     board.check_winner_diagonal_2(player1,player2, @counter, game)
+    board.reset_counter
     @turn += 1
   end
 end
 
 def append_move(x, y, board)
   if @turn % 2 == 0
-    board.grid[x - 1][y - 1] = 'O'
+    board.grid[y - 1][x - 1] = 'O'
   else 
-    board.grid[x - 1][y - 1] = 'X'
+    board.grid[y - 1][x - 1] = 'X'
   end
 end
 
