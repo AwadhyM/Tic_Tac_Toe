@@ -39,7 +39,8 @@ end
 
   def verify_x_y(game, board)
     if grid[game.x-1][game.y-1] != ''
-      puts "\nThose coordinates are already taken! Lets try again"
+      puts "\nThose coordinates (#{game.x},#{game.y}) are already taken! Lets try again"
+      board.display_board
       game.retrieve_x_coordinate
       game.retrieve_y_coordinate
     end
@@ -155,12 +156,12 @@ class Game
   end
 
   def retrieve_x_coordinate
-    puts "Enter a number between 1 - 3 for the x coordinate in which you would like to place your move"
+    puts "\nEnter a number between 1 - 3 for the x coordinate in which you would like to place your move"
     @x = gets.chomp.to_i
   end
 
   def retrieve_y_coordinate
-    puts "Enter a number between 1 - 3 for the y coordinate in which you would like to place your move"
+    puts "\nEnter a number between 1 - 3 for the y coordinate in which you would like to place your move"
     @y = gets.chomp.to_i
   end
 
