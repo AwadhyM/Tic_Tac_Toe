@@ -25,7 +25,17 @@ class GameBoard
     end
   end
 
-  
+  def verify_x_coordinate(game)
+    while game.x < 1 || game.x > 3
+      game.retrieve_x_coordinate
+  end
+end
+
+  def verify_y_coordinate(game)
+    while game.y < 1 || game.y > 3
+      game.retrieve_y_coordinate
+    end
+  end
 
   def check_winner_row(player1, player2, counter, game)
     while @counter <= 2 do
@@ -47,7 +57,6 @@ end
 
 def check_winner_column(player1, player2, counter, game)
   while @counter <= 2 do
-    # binding.pry
     column = [grid[0][@counter], grid[1][@counter], grid[2][@counter]]
     if column.uniq == [''] || column.uniq.length > 1
       @counter += 1
@@ -122,11 +131,13 @@ class Players
 end
 
 class Game
-  attr_accessor :turn, :number_of_player
+  attr_reader :turn, :number_of_player, :x, :y
 
   def initialize
     @turn = 0
     @number_of_player = 0
+    @x = 0
+    @y = 0
     puts 'Welcome to this game of Tic Tac Toe.'
   end
 
@@ -136,11 +147,13 @@ class Game
   end
 
   def retrieve_x_coordinate
-    puts "enter the x coordinate in which you would like to place your move"
+    puts "Enter a number between 1 - 3 for the x coordinate in which you would like to place your move"
+    @x = gets.chomp.to_i
   end
 
   def retrieve_y_coordinate
-    puts "enter the y coordinate in which you would like to place your move"
+    puts "Enter a number between 1 - 3 for the y coordinate in which you would like to place your move"
+    @y = gets.chomp.to_i
   end
 
   def display_info(player1, player2)
@@ -153,9 +166,9 @@ class Game
     while @turn <= 7 do
     board.display_board
     game.retrieve_x_coordinate
-    x = gets.chomp.to_i
+    board.verify_x_coordinate(game)
     game.retrieve_y_coordinate
-    y = gets.chomp.to_i
+    board.verify_y_coordinate(game)
     game.append_move(x, y, board)
     board.check_winner_row(player1, player2, @counter, game)
     board.reset_counter
@@ -169,9 +182,10 @@ class Game
 end
 
 def append_move(x, y, board)
+  
   if @turn % 2 == 0
     board.grid[y - 1][x - 1] = 'O'
-  else 
+  else
     board.grid[y - 1][x - 1] = 'X'
   end
 end
