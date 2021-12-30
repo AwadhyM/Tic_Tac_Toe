@@ -38,7 +38,8 @@ end
   end
 
   def verify_x_y(game, board)
-    if grid[game.x-1][game.y-1] != ''
+    #binding.pry
+    if grid[game.y-1][game.x-1] != ''
       puts "\nThose coordinates (#{game.x},#{game.y}) are already taken! Lets try again"
       board.display_board
       game.retrieve_x_coordinate
@@ -86,7 +87,6 @@ end
   def check_winner_diagonal_1(player1, player2, counter, game)
     diagonal = [grid[0][0], grid[1][1], grid[2][2]]
     if diagonal.uniq == [''] || diagonal.uniq.length > 1
-      @counter += 1
     elsif diagonal.length == 3 && diagonal.uniq == ['O']
       self.display_board
       puts "Congratulations #{player1.name} you win!"
@@ -185,6 +185,7 @@ class Game
     board.check_winner_column(player1, player2, @counter, game)
     board.reset_counter
     board.check_winner_diagonal_1(player1,player2, @counter, game)
+    board.reset_counter
     board.check_winner_diagonal_2(player1,player2, @counter, game)
     board.reset_counter
     @turn += 1
