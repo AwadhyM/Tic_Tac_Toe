@@ -47,6 +47,16 @@ end
     end
   end
 
+  def append_move(x, y, game, player1)
+    if game.turn % 2 == 0 && game.goes_first == player1
+      self.grid[y - 1][x - 1] = 'O'
+    elsif player1.goes_first != player1 && game.turn % 2 == 0
+      self.grid[y - 1][x - 1] = 'X'
+    else
+      self.grid[y - 1][x - 1] = 'O'
+  end
+  end
+
   def check_winner_row(player1, player2, counter, game)
     while @counter <= 2 do
     if grid[@counter].uniq == [''] || grid[@counter].uniq.length > 1
@@ -157,7 +167,7 @@ class Players
 end
 
 class Game
-  attr_reader :turn, :number_of_player, :x, :y
+  attr_reader :turn, :number_of_player, :x, :y, :goes_first
 
   def initialize
     @turn = 0
@@ -207,7 +217,7 @@ end
     game.retrieve_y_coordinate
     board.verify_y_coordinate(game)
     board.verify_x_y(game, board)
-    game.append_move(x, y, board, player1)
+    board.append_move(x, y, game, player1)
     board.check_winner_row(player1, player2, @counter, game)
     board.reset_counter
     board.check_winner_column(player1, player2, @counter, game)
@@ -219,16 +229,6 @@ end
     board.check_draw(game)
     @turn += 1
   end
-end
-
-def append_move(x, y, board, player1)
-  if @turn % 2 == 0 && @goes_first == player1
-    board.grid[y - 1][x - 1] = 'O'
-  elsif player1.goes_first != true && turn % 2 == 0
-    board.grid[y - 1][x - 1] = 'X'
-  else
-    board.grid[y - 1][x - 1] = 'O'
-end
 end
 
 def end_game
