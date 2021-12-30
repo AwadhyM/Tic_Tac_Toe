@@ -7,7 +7,6 @@ class GameBoard
       ['', '', ''],
       ['', '', '']
     ]
-    @counter = 0
     @column = []
     @diagonal = []
   end
@@ -49,77 +48,81 @@ class GameBoard
                          end
   end
 
-  def check_winner_row(player1, player2, _counter, game)
-    while @counter <= 2
-      if grid[@counter].uniq == [''] || grid[@counter].uniq.length > 1
-        @counter += 1
-      elsif grid[@counter].length == 3 && grid[@counter].uniq == ['O']
+  def check_winner_row(player1, player2,game)
+    counter = 0
+    while counter <= 2
+      if grid[counter].uniq == [''] || grid[counter].uniq.length > 1
+        counter += 1
+      elsif grid[counter].length == 3 && grid[counter].uniq == ['O']
         display_board
         puts "Congratulations #{player1.name} you win!"
-        @counter += 1
+        counter += 1
         game.end_game
-      elsif grid[@counter].length == 3 && grid[@counter].uniq == ['X']
+      elsif grid[counter].length == 3 && grid[counter].uniq == ['X']
         display_board
         puts "Congratulations #{player2.name} you win!"
-        @counter += 1
+        counter += 1
         game.end_game
       end
     end
   end
 
-  def check_winner_column(player1, player2, _counter, game)
-    while @counter <= 2
-      column = [grid[0][@counter], grid[1][@counter], grid[2][@counter]]
+  def check_winner_column(player1, player2,game)
+    counter = 0
+    while counter <= 2
+      column = [grid[0][counter], grid[1][counter], grid[2][counter]]
       if column.uniq == [''] || column.uniq.length > 1
-        @counter += 1
+        counter += 1
       elsif column.length == 3 && column.uniq == ['O']
         display_board
         puts "Congratulations #{player1.name} you win!"
-        @counter += 1
+        counter += 1
         game.end_game
       elsif column.length == 3 && column.uniq == ['X']
         display_board
         puts "Congratulations #{player2.name} you win!"
-        @counter += 1
+        counter += 1
         game.end_game
       end
     end
   end
 
-  def check_winner_diagonal_1(player1, player2, _counter, game)
-    while @counter <= 2
+  def check_winner_diagonal_1(player1, player2,game)
+    counter = 0
+    while counter <= 2
       diagonal = [grid[0][0], grid[1][1], grid[2][2]]
       if diagonal.uniq == [''] || diagonal.uniq.length > 1
-        @counter += 3
+        counter += 3
       elsif diagonal.length == 3 && diagonal.uniq == ['O']
         display_board
         puts "Congratulations #{player1.name} you win!"
         game.end_game
-        @counter += 3
+        counter += 3
       elsif diagonal.length == 3 && diagonal.uniq == ['X']
         display_board
         puts "Congratulations #{player2.name} you win!"
         game.end_game
-        @counter += 3
+        counter += 3
       end
     end
   end
 
-  def check_winner_diagonal_2(player1, player2, _counter, game)
-    while @counter <= 2
+  def check_winner_diagonal_2(player1, player2,game)
+    counter = 0
+    while counter <= 2
       diagonal = [grid[0][2], grid[1][1], grid[2][0]]
       if diagonal.uniq == [''] || diagonal.uniq.length > 1
-        @counter += 1
+        counter += 1
       elsif diagonal.length == 3 && diagonal.uniq == ['O']
         display_board
         puts "Congratulations #{player1.name} you win!"
         game.end_game
-        @counter += 3
+        counter += 3
       elsif diagonal.length == 3 && diagonal.uniq == ['X']
         display_board
         puts "Congratulations #{player2.name} you win!"
         game.end_game
-        @counter += 3
+        counter += 3
         break
       end
     end
@@ -130,10 +133,6 @@ class GameBoard
       puts 'Looks like you are both evenly matched! The game ends in a draw'
       game.end_game
     end
-  end
-
-  def reset_counter
-    @counter = 0
   end
 end
 
@@ -210,14 +209,10 @@ class Game
       board.verify_y_coordinate(game)
       board.verify_x_y(game, board)
       board.append_move(x, y, game, player1)
-      board.check_winner_row(player1, player2, @counter, game)
-      board.reset_counter
-      board.check_winner_column(player1, player2, @counter, game)
-      board.reset_counter
-      board.check_winner_diagonal_1(player1, player2, @counter, game)
-      board.reset_counter
-      board.check_winner_diagonal_2(player1, player2, @counter, game)
-      board.reset_counter
+      board.check_winner_row(player1, player2, game)
+      board.check_winner_column(player1, player2, game)
+      board.check_winner_diagonal_1(player1, player2, game)
+      board.check_winner_diagonal_2(player1, player2, game)
       board.check_draw(game)
       @turn += 1
     end
