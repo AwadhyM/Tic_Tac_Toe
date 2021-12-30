@@ -124,7 +124,7 @@ end
 end 
 
 def check_draw(game)
-  if game.turn > 8 && game.turn < 10
+  if game.turn == 8
     puts "Looks like you are both evenly matched! The game ends in a draw"
     game.end_game
   end
