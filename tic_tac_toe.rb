@@ -37,6 +37,14 @@ end
     end
   end
 
+  def verify_x_y(game, board)
+    if grid[game.x-1][game.y-1] != ''
+      puts "\nThose coordinates are already taken! Lets try again"
+      game.retrieve_x_coordinate
+      game.retrieve_y_coordinate
+    end
+  end
+
   def check_winner_row(player1, player2, counter, game)
     while @counter <= 2 do
     if grid[@counter].uniq == [''] || grid[@counter].uniq.length > 1
@@ -169,6 +177,7 @@ class Game
     board.verify_x_coordinate(game)
     game.retrieve_y_coordinate
     board.verify_y_coordinate(game)
+    board.verify_x_y(game, board)
     game.append_move(x, y, board)
     board.check_winner_row(player1, player2, @counter, game)
     board.reset_counter
