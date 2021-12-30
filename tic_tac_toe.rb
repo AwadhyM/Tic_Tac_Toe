@@ -1,5 +1,3 @@
-require 'pry-byebug'
-
 class GameBoard
   attr_reader :grid, :counter, :column, :diagonal
 
