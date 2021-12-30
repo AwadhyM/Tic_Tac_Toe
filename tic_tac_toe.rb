@@ -137,6 +137,7 @@ end
 
 class Players
   attr_accessor :name, :move
+  attr_reader :goes_first
 
   @@number_of_players = 0
 
@@ -144,6 +145,7 @@ class Players
     @name = name
     @move = move
     @@number_of_players += 1
+    @goes_first = ''
   end
 
   def verify_name
@@ -162,8 +164,19 @@ class Game
     @number_of_player = 0
     @x = 0
     @y = 0
+    @goes_first = ''
     puts 'Welcome to this game of Tic Tac Toe.'
   end
+
+  def pick_first(player1, player2)
+    number = rand(0..100)
+    if number % 2 == 0 
+      @goes_first = player1
+      puts "\nCongratulation #{player1.name} you have been randomly selected to go first"
+    else
+      puts "\nCongratulations #{player2.name} you have been randomly selected to go first"
+end
+end
 
   def ask_player
     @number_of_player += 1
@@ -194,7 +207,7 @@ class Game
     game.retrieve_y_coordinate
     board.verify_y_coordinate(game)
     board.verify_x_y(game, board)
-    game.append_move(x, y, board)
+    game.append_move(x, y, board, player1)
     board.check_winner_row(player1, player2, @counter, game)
     board.reset_counter
     board.check_winner_column(player1, player2, @counter, game)
@@ -208,13 +221,14 @@ class Game
   end
 end
 
-def append_move(x, y, board)
-  
-  if @turn % 2 == 0
+def append_move(x, y, board, player1)
+  if @turn % 2 == 0 && @goes_first == player1
     board.grid[y - 1][x - 1] = 'O'
-  else
+  elsif player1.goes_first != true && turn % 2 == 0
     board.grid[y - 1][x - 1] = 'X'
-  end
+  else
+    board.grid[y - 1][x - 1] = 'O'
+end
 end
 
 def end_game
@@ -233,4 +247,5 @@ game.ask_player
 player2 = Players.new(gets.chomp.to_s, 'X')
 player2.verify_name
 game.display_info(player1, player2)
+game.pick_first(player1,player2)
 game.play_round(board, game, player1, player2)
