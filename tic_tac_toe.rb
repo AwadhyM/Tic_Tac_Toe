@@ -3,7 +3,6 @@
 require 'pry-byebug'
 
 class GameBoard
-
   attr_reader :grid, :counter, :column, :diagonal
 
   def initialize
@@ -14,8 +13,8 @@ class GameBoard
     ]
     @counter = 0
 
-    @column = Array.new
-    @diagonal = Array.new 
+    @column = []
+    @diagonal = []
   end
 
   def display_board
@@ -26,20 +25,16 @@ class GameBoard
   end
 
   def verify_x_coordinate(game)
-    while game.x < 1 || game.x > 3
-      game.retrieve_x_coordinate
+    game.retrieve_x_coordinate while game.x < 1 || game.x > 3
   end
-end
 
   def verify_y_coordinate(game)
-    while game.y < 1 || game.y > 3
-      game.retrieve_y_coordinate
-    end
+    game.retrieve_y_coordinate while game.y < 1 || game.y > 3
   end
 
   def verify_x_y(game, board)
-    #binding.pry
-    if grid[game.y-1][game.x-1] != ''
+    # binding.pry
+    if grid[game.y - 1][game.x - 1] != ''
       puts "\nThose coordinates (#{game.x},#{game.y}) are already taken! Lets try again"
       board.display_board
       game.retrieve_x_coordinate
@@ -48,97 +43,100 @@ end
   end
 
   def append_move(x, y, game, player1)
-    if game.turn % 2 == 0 && game.goes_first == player1
-      self.grid[y - 1][x - 1] = 'O'
-    elsif player1.goes_first != player1 && game.turn % 2 == 0
-      self.grid[y - 1][x - 1] = 'X'
-    else
-      self.grid[y - 1][x - 1] = 'O'
-  end
+    grid[y - 1][x - 1] = if game.turn.even? && game.goes_first == player1
+                           'O'
+                         elsif player1.goes_first != player1 && game.turn.even?
+                           'X'
+                         elsif game.turn.odd? && game.goes_first != player1
+                           'O'
+                         else
+                           game.turn.odd? && game.goes_first == player1
+                           'X'
+                         end
   end
 
-  def check_winner_row(player1, player2, counter, game)
-    while @counter <= 2 do
-    if grid[@counter].uniq == [''] || grid[@counter].uniq.length > 1
-      @counter += 1
-    elsif grid[@counter].length == 3 && grid[@counter].uniq == ['O']
-      self.display_board
-      puts "Congratulations #{player1.name} you win!"
-      @counter += 1
-      game.end_game
-    elsif grid[@counter].length == 3 && grid[@counter].uniq == ['X']
-      self.display_board
-      puts "Congratulations #{player2.name} you win!"
-      @counter += 1
+  def check_winner_row(player1, player2, _counter, game)
+    while @counter <= 2
+      if grid[@counter].uniq == [''] || grid[@counter].uniq.length > 1
+        @counter += 1
+      elsif grid[@counter].length == 3 && grid[@counter].uniq == ['O']
+        display_board
+        puts "Congratulations #{player1.name} you win!"
+        @counter += 1
+        game.end_game
+      elsif grid[@counter].length == 3 && grid[@counter].uniq == ['X']
+        display_board
+        puts "Congratulations #{player2.name} you win!"
+        @counter += 1
+        game.end_game
+      end
+    end
+  end
+
+  def check_winner_column(player1, player2, _counter, game)
+    while @counter <= 2
+      column = [grid[0][@counter], grid[1][@counter], grid[2][@counter]]
+      if column.uniq == [''] || column.uniq.length > 1
+        @counter += 1
+      elsif column.length == 3 && column.uniq == ['O']
+        display_board
+        puts "Congratulations #{player1.name} you win!"
+        @counter += 1
+        game.end_game
+      elsif column.length == 3 && column.uniq == ['X']
+        display_board
+        puts "Congratulations #{player2.name} you win!"
+        @counter += 1
+        game.end_game
+      end
+    end
+  end
+
+  def check_winner_diagonal_1(player1, player2, _counter, game)
+    while @counter <= 2
+      diagonal = [grid[0][0], grid[1][1], grid[2][2]]
+      if diagonal.uniq == [''] || diagonal.uniq.length > 1
+        @counter += 3
+      elsif diagonal.length == 3 && diagonal.uniq == ['O']
+        display_board
+        puts "Congratulations #{player1.name} you win!"
+        game.end_game
+        @counter += 3
+      elsif diagonal.length == 3 && diagonal.uniq == ['X']
+        display_board
+        puts "Congratulations #{player2.name} you win!"
+        game.end_game
+        @counter += 3
+      end
+    end
+  end
+
+  def check_winner_diagonal_2(player1, player2, _counter, game)
+    while @counter <= 2
+      diagonal = [grid[0][2], grid[1][1], grid[2][0]]
+      if diagonal.uniq == [''] || diagonal.uniq.length > 1
+        @counter += 1
+      elsif diagonal.length == 3 && diagonal.uniq == ['O']
+        display_board
+        puts "Congratulations #{player1.name} you win!"
+        game.end_game
+        @counter += 3
+      elsif diagonal.length == 3 && diagonal.uniq == ['X']
+        display_board
+        puts "Congratulations #{player2.name} you win!"
+        game.end_game
+        @counter += 3
+        break
+      end
+    end
+  end
+
+  def check_draw(game)
+    if game.turn == 8
+      puts 'Looks like you are both evenly matched! The game ends in a draw'
       game.end_game
     end
   end
-end
-
-def check_winner_column(player1, player2, counter, game)
-  while @counter <= 2 do
-    column = [grid[0][@counter], grid[1][@counter], grid[2][@counter]]
-    if column.uniq == [''] || column.uniq.length > 1
-      @counter += 1
-    elsif column.length == 3 && column.uniq == ['O']
-      self.display_board
-      puts "Congratulations #{player1.name} you win!"
-      @counter += 1
-      game.end_game
-    elsif column.length == 3 && column.uniq == ['X']
-      self.display_board
-      puts "Congratulations #{player2.name} you win!"
-      @counter += 1
-      game.end_game
-    end
-  end
-end
-
-  def check_winner_diagonal_1(player1, player2, counter, game)
-    while @counter <= 2 do
-    diagonal = [grid[0][0], grid[1][1], grid[2][2]]
-    if diagonal.uniq == [''] || diagonal.uniq.length > 1
-      @counter += 3
-    elsif diagonal.length == 3 && diagonal.uniq == ['O']
-      self.display_board
-      puts "Congratulations #{player1.name} you win!"
-      game.end_game
-      @counter += 3
-    elsif diagonal.length == 3 && diagonal.uniq == ['X']
-      self.display_board
-      puts "Congratulations #{player2.name} you win!"
-      game.end_game
-      @counter += 3
-    end
-  end
-end
-
-  def check_winner_diagonal_2(player1, player2, counter, game)
-    while @counter <= 2 do
-    diagonal = [grid[0][2], grid[1][1], grid[2][0]]
-    if diagonal.uniq == [''] || diagonal.uniq.length > 1
-      @counter += 1
-    elsif diagonal.length == 3 && diagonal.uniq == ['O']
-      self.display_board
-      puts "Congratulations #{player1.name} you win!"
-      game.end_game
-      @counter += 3
-    elsif diagonal.length == 3 && diagonal.uniq == ['X']
-      self.display_board
-      puts "Congratulations #{player2.name} you win!"
-      game.end_game
-      @counter += 3
-      break
-    end
-  end 
-end 
-
-def check_draw(game)
-  if game.turn == 8
-    puts "Looks like you are both evenly matched! The game ends in a draw"
-    game.end_game
-  end
-end
 
   def reset_counter
     @counter = 0
@@ -180,13 +178,13 @@ class Game
 
   def pick_first(player1, player2)
     number = rand(0..100)
-    if number % 2 == 0 
+    if number.even?
       @goes_first = player1
       puts "\nCongratulation #{player1.name} you have been randomly selected to go first"
     else
       puts "\nCongratulations #{player2.name} you have been randomly selected to go first"
-end
-end
+    end
+  end
 
   def ask_player
     @number_of_player += 1
@@ -209,34 +207,32 @@ end
     puts "\nUsername:#{player2.name} |Move: #{player2.move}"
   end
 
-  def play_round (board, game, player1, player2)
-    while @turn <= 9 do
-    board.display_board
-    game.retrieve_x_coordinate
-    board.verify_x_coordinate(game)
-    game.retrieve_y_coordinate
-    board.verify_y_coordinate(game)
-    board.verify_x_y(game, board)
-    board.append_move(x, y, game, player1)
-    board.check_winner_row(player1, player2, @counter, game)
-    board.reset_counter
-    board.check_winner_column(player1, player2, @counter, game)
-    board.reset_counter
-    board.check_winner_diagonal_1(player1,player2, @counter, game)
-    board.reset_counter
-    board.check_winner_diagonal_2(player1,player2, @counter, game)
-    board.reset_counter
-    board.check_draw(game)
-    @turn += 1
+  def play_round(board, game, player1, player2)
+    while @turn <= 9
+      board.display_board
+      game.retrieve_x_coordinate
+      board.verify_x_coordinate(game)
+      game.retrieve_y_coordinate
+      board.verify_y_coordinate(game)
+      board.verify_x_y(game, board)
+      board.append_move(x, y, game, player1)
+      board.check_winner_row(player1, player2, @counter, game)
+      board.reset_counter
+      board.check_winner_column(player1, player2, @counter, game)
+      board.reset_counter
+      board.check_winner_diagonal_1(player1, player2, @counter, game)
+      board.reset_counter
+      board.check_winner_diagonal_2(player1, player2, @counter, game)
+      board.reset_counter
+      board.check_draw(game)
+      @turn += 1
+    end
+  end
+
+  def end_game
+    @turn = 10
   end
 end
-
-def end_game
-  @turn = 10
-end
-end
-
-
 
 game = Game.new
 board = GameBoard.new
@@ -247,5 +243,5 @@ game.ask_player
 player2 = Players.new(gets.chomp.to_s, 'X')
 player2.verify_name
 game.display_info(player1, player2)
-game.pick_first(player1,player2)
+game.pick_first(player1, player2)
 game.play_round(board, game, player1, player2)
