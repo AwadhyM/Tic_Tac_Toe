@@ -45,12 +45,12 @@ end
       self.display_board
       puts "Congratulations #{player1.name} you win!"
       @counter += 1
-      game.turn = 8
+      game.end_game
     elsif grid[@counter].length == 3 && grid[@counter].uniq == ['X']
       self.display_board
       puts "Congratulations #{player2.name} you win!"
       @counter += 1
-      game.turn = 8
+      game.end_game
     end
   end
 end
@@ -64,12 +64,12 @@ def check_winner_column(player1, player2, counter, game)
       self.display_board
       puts "Congratulations #{player1.name} you win!"
       @counter += 1
-      game.turn = 8
+      game.end_game
     elsif column.length == 3 && column.uniq == ['X']
       self.display_board
       puts "Congratulations #{player2.name} you win!"
       @counter += 1
-      game.turn = 8
+      game.end_game
     end
   end
 end
@@ -81,11 +81,11 @@ end
     elsif diagonal.length == 3 && diagonal.uniq == ['O']
       self.display_board
       puts "Congratulations #{player1.name} you win!"
-      game.turn = 8
+      game.end_game
     elsif diagonal.length == 3 && diagonal.uniq == ['X']
       self.display_board
       puts "Congratulations #{player2.name} you win!"
-      game.turn = 8
+      game.end_game
     end
   end
 
@@ -97,11 +97,11 @@ end
     elsif diagonal.length == 3 && diagonal.uniq == ['O']
       self.display_board
       puts "Congratulations #{player1.name} you win!"
-      game.turn = 8
+      game.end_game
     elsif diagonal.length == 3 && diagonal.uniq == ['X']
       self.display_board
       puts "Congratulations #{player2.name} you win!"
-      game.turn = 8
+      game.end_game
     end
   end 
 end 
