@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require 'pry-byebug'
 
 class GameBoard
@@ -12,7 +10,6 @@ class GameBoard
       ['', '', '']
     ]
     @counter = 0
-
     @column = []
     @diagonal = []
   end
@@ -33,7 +30,6 @@ class GameBoard
   end
 
   def verify_x_y(game, board)
-    # binding.pry
     if grid[game.y - 1][game.x - 1] != ''
       puts "\nThose coordinates (#{game.x},#{game.y}) are already taken! Lets try again"
       board.display_board
